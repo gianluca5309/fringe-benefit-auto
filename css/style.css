@@ -1,0 +1,622 @@
+/* style.css — strumento professionale per consulenti del lavoro e fleet
+   manager. Gerarchia visiva chiara, distinzione cromatica netta tra
+   informazione/warning/errore, niente styling decorativo. */
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-secondary: #f0f1f3;
+  --border: #d5d8dd;
+  --border-strong: #b7bcc4;
+  --text: #1c2127;
+  --text-muted: #5b6270;
+  --accent: #1a4d8f;
+  --accent-contrast: #ffffff;
+
+  --info-bg: #eaf2fc;
+  --info-border: #a9c8ec;
+  --info-text: #123a6b;
+
+  --warning-bg: #fdf3e0;
+  --warning-border: #e8bf6a;
+  --warning-text: #6b4a05;
+
+  --error-bg: #fbe9e9;
+  --error-border: #e2a3a3;
+  --error-text: #7a1414;
+
+  --success-bg: #e8f4ea;
+  --success-border: #a9d2b1;
+  --success-text: #1e5c2c;
+
+  --radius: 4px;
+  --font: -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-mono: Consolas, "SFMono-Regular", Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.app-shell {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+header.app-header {
+  margin-bottom: 1.5rem;
+}
+
+header.app-header h1 {
+  font-size: 1.35rem;
+  margin: 0 0 0.15rem;
+}
+
+header.app-header p.sottotitolo {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ── Indicatore di step ────────────────────────────────────────────── */
+
+.step-indicator {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.step-indicator li {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.step-indicator li .num {
+  display: inline-block;
+  width: 1.3rem;
+  height: 1.3rem;
+  line-height: 1.3rem;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--surface);
+  font-weight: 600;
+  margin-right: 0.35rem;
+}
+
+.step-indicator li.attivo {
+  border-color: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.step-indicator li.attivo .num {
+  background: var(--accent);
+}
+
+.step-indicator li.completato .num {
+  background: var(--success-text);
+}
+
+/* ── Contenitori step ──────────────────────────────────────────────── */
+
+.step-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.4rem;
+}
+
+.step-panel[hidden] {
+  display: none !important;
+}
+
+.step-panel h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.step-panel h3 {
+  font-size: 0.92rem;
+  margin: 1.1rem 0 0.5rem;
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.9rem 0.9rem;
+}
+
+legend {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0 0.35rem;
+}
+
+.campo {
+  margin-bottom: 0.85rem;
+}
+
+.campo label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.campo .aiuto {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.riga-campi {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.riga-campi > .campo {
+  flex: 1 1 220px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: var(--surface);
+  color: var(--text);
+}
+
+input:disabled,
+select:disabled {
+  background: var(--surface-secondary);
+  color: var(--text-muted);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 3.4rem;
+}
+
+.opzione-radio {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--surface-secondary);
+}
+
+.opzione-radio:last-child {
+  border-bottom: none;
+}
+
+.opzione-radio input {
+  margin-top: 0.2rem;
+}
+
+.opzione-radio .testo strong {
+  display: block;
+  font-size: 0.86rem;
+}
+
+.opzione-radio .testo span {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.checkbox-linea {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.checkbox-linea label {
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ── Bottoni ───────────────────────────────────────────────────────── */
+
+.azioni {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+button {
+  font-family: inherit;
+  font-size: 0.88rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primario {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+
+button.primario:hover:not(:disabled) {
+  background: #143c6e;
+}
+
+button.link {
+  border: none;
+  background: none;
+  color: var(--accent);
+  padding: 0.2rem 0;
+  text-decoration: underline;
+  font-size: 0.84rem;
+}
+
+/* ── Riquadri semantici (info / warning / errore / successo) ─────────── */
+
+.riquadro {
+  border-radius: var(--radius);
+  border: 1px solid;
+  padding: 0.75rem 0.9rem;
+  margin: 0.75rem 0;
+  font-size: 0.86rem;
+}
+
+.riquadro.info {
+  background: var(--info-bg);
+  border-color: var(--info-border);
+  color: var(--info-text);
+}
+
+.riquadro.warning {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning-text);
+}
+
+.riquadro.errore {
+  background: var(--error-bg);
+  border-color: var(--error-border);
+  color: var(--error-text);
+}
+
+.riquadro.successo {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success-text);
+}
+
+.riquadro h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.88rem;
+}
+
+.riquadro ul {
+  margin: 0.3rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.riquadro.non-richiudibile {
+  font-weight: 600;
+}
+
+/* ── Ricerca ACI ───────────────────────────────────────────────────── */
+
+.aci-primaria {
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem 1rem;
+  background: var(--surface);
+}
+
+.aci-primaria > .etichetta-primaria {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.risultati-aci {
+  margin-top: 0.5rem;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.risultati-aci[hidden] {
+  display: none;
+}
+
+.risultato-aci-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 0;
+  font-size: 0.85rem;
+}
+
+.risultato-aci-item:last-child {
+  border-bottom: none;
+}
+
+.risultato-aci-item:hover {
+  background: var(--surface-secondary);
+}
+
+.risultato-aci-item .marca-modello {
+  font-weight: 600;
+}
+
+.risultato-aci-item .dettagli {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.card-selezione {
+  margin-top: 0.75rem;
+  border: 1px solid var(--success-border);
+  background: var(--success-bg);
+  border-radius: var(--radius);
+  padding: 0.75rem 0.9rem;
+}
+
+.card-selezione .riga-titolo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.card-selezione .riga-titolo strong {
+  font-size: 0.95rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  background: var(--surface);
+  margin-right: 0.3rem;
+}
+
+.badge.in-produzione {
+  border-color: var(--success-border);
+  color: var(--success-text);
+  background: var(--success-bg);
+}
+
+.badge.fuori-produzione {
+  border-color: var(--border-strong);
+  color: var(--text-muted);
+}
+
+.badge.attiva {
+  border-color: var(--info-border);
+  color: var(--info-text);
+  background: var(--info-bg);
+}
+
+/* ── Area valore manuale (secondaria) ─────────────────────────────── */
+
+.toggle-manuale {
+  margin-top: 0.9rem;
+}
+
+.area-manuale {
+  margin-top: 0.6rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  padding: 0.8rem 0.9rem;
+  background: var(--surface-secondary);
+}
+
+.area-manuale[hidden] {
+  display: none;
+}
+
+.area-manuale .etichetta-secondaria {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* ── Risultato (STEP 4) ────────────────────────────────────────────── */
+
+.esito-principale {
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.esito-principale .valore-grande {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--info-text);
+}
+
+.esito-principale .sotto-valori {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.esito-principale .sotto-valori strong {
+  color: var(--text);
+}
+
+table.breakdown {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+  margin-top: 0.4rem;
+}
+
+table.breakdown th,
+table.breakdown td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+table.breakdown th {
+  background: var(--surface-secondary);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+table.breakdown td.valore {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.griglia-dettaglio {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.dettaglio-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.7rem;
+  background: var(--surface);
+}
+
+.dettaglio-item .etichetta {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.dettaglio-item .valore {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+
+.soglia-box {
+  border-radius: var(--radius);
+  border: 1px solid;
+  padding: 0.75rem 0.9rem;
+  margin: 0.75rem 0;
+}
+
+.soglia-box.entro {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success-text);
+}
+
+.soglia-box.superata {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning-text);
+}
+
+footer.app-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --surface: #1c1f24;
+    --surface-secondary: #24272d;
+    --border: #33373f;
+    --border-strong: #454a53;
+    --text: #e7e9ec;
+    --text-muted: #9aa1ac;
+    --accent: #6fa3e0;
+    --accent-contrast: #0d1117;
+
+    --info-bg: #17263b;
+    --info-border: #2e5c8f;
+    --info-text: #bcd6f5;
+
+    --warning-bg: #3a2c0f;
+    --warning-border: #8a6a1f;
+    --warning-text: #f0cf8c;
+
+    --error-bg: #3a1414;
+    --error-border: #8a3535;
+    --error-text: #f3b3b3;
+
+    --success-bg: #12301b;
+    --success-border: #2f6b40;
+    --success-text: #a9e0b8;
+  }
+}

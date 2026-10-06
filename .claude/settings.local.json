@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($p = \"test\\\\run-tests.js\"; $c = Get-Content $p -Raw; $c = $c.Replace\\(\"      dataStipulaContratto: `\"2025-01-15`\",`r`n      co2: 145,\", \"      dataStipulaContratto: `\"2025-01-15`\",\"\\).Replace\\(\"      dataStipulaContratto: `\"2023-02-01`\",`r`n      co2: 145,\", \"      dataStipulaContratto: `\"2023-02-01`\",\"\\); $c = $c.Replace\\(\"      tipoAtto: `\"PROROGA`\",`r`n      co2: 145,\", \"      tipoAtto: `\"PROROGA`\",\"\\).Replace\\(\"      tipoAtto: `\"RIASSEGNAZIONE`\",`r`n      co2: 145,\", \"      tipoAtto: `\"RIASSEGNAZIONE`\",\"\\); Set-Content -Path \"$env:TEMP\\\\claude-pre-fix-run-tests.js\" -Value $c -Encoding utf8; $c | Set-Content -Path $p -Encoding utf8; node test/run-tests.js)",
+      "PowerShell(node \"C:\\\\Users\\\\FRISON~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Frison-Gianluca-fringe-benefit-auto\\\\f34b25ce-1222-4ac6-96f4-233aceebac88\\\\scratchpad\\\\check-co2-null.js\")"
+    ]
+  }
+}

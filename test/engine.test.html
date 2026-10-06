@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>Test motore fringe benefit auto</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Arial, sans-serif; margin: 2rem; background: #fafafa; color: #222; }
+  h1 { font-size: 1.2rem; }
+  .case { border: 1px solid #ddd; border-radius: 6px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; }
+  .pass { border-left: 6px solid #2a8f4a; }
+  .fail { border-left: 6px solid #c0392b; background: #fff4f2; }
+  .id { font-weight: bold; }
+  .riga { font-family: Consolas, monospace; font-size: 0.85rem; white-space: pre-wrap; }
+  #riepilogo { font-size: 1.1rem; margin: 1rem 0; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>Test motore di calcolo — fringe benefit auto uso promiscuo</h1>
+<div id="riepilogo">Esecuzione in corso...</div>
+<div id="risultati"></div>
+
+<script type="module">
+// Tutti i casi e l'asserzione automatica (errors/warnings) vivono in
+// cases.js: questo file si limita a eseguirli e a renderli nel DOM.
+import { casi, valutaCaso } from "./cases.js";
+
+const risultatiEl = document.getElementById("risultati");
+const riepilogoEl = document.getElementById("riepilogo");
+let passCount = 0;
+
+for (const caso of casi) {
+  const esito = valutaCaso(caso);
+  if (esito.pass) passCount++;
+
+  const div = document.createElement("div");
+  div.className = "case " + (esito.pass ? "pass" : "fail");
+
+  const titolo = document.createElement("div");
+  titolo.innerHTML = `<span class="id">[${esito.pass ? "PASS" : "FAIL"}] ${esito.id}</span> — ${esito.descrizione}`;
+
+  const rigaAtteso = document.createElement("div");
+  rigaAtteso.className = "riga";
+  rigaAtteso.textContent = `atteso:   ${esito.atteso}`;
+
+  const rigaOttenuto = document.createElement("div");
+  rigaOttenuto.className = "riga";
+  rigaOttenuto.textContent = `ottenuto: ${esito.ottenuto}${esito.problemi.length ? " | " + esito.problemi.join(" | ") : ""}`;
+
+  div.append(titolo, rigaAtteso, rigaOttenuto);
+  risultatiEl.appendChild(div);
+}
+
+riepilogoEl.textContent = `Risultato: ${passCount}/${casi.length} test passati.`;
+</script>
+</body>
+</html>

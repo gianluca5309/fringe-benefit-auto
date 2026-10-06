@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fringe benefit auto — calcolo 2026</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="app-header">
+    <h1>Fringe benefit auto ad uso promiscuo — calcolo 2026</h1>
+    <p class="sottotitolo">
+      Art. 51 c.4 lett. a) TUIR, come modificato da L. 207/2024 e dal
+      D.Lgs. 7 agosto 2026 n. 148 ("Decreto Omnibus").
+    </p>
+  </header>
+
+  <ol class="step-indicator" id="step-indicator">
+    <li data-step="1"><span class="num">1</span>Targa</li>
+    <li data-step="2"><span class="num">2</span>Valore base</li>
+    <li data-step="3"><span class="num">3</span>Dati contrattuali</li>
+    <li data-step="4"><span class="num">4</span>Risultato</li>
+  </ol>
+
+  <!-- ══════════════════════════ STEP 1 — TARGA ══════════════════════════ -->
+  <section class="step-panel" id="step-1">
+    <h2>Passo 1 — Targa (facoltativo)</h2>
+    <p class="aiuto">
+      Se inserisci una targa valida, alcuni dati del veicolo verranno
+      precompilati. Puoi anche saltare questo passo e inserire tutto a
+      mano.
+    </p>
+
+    <div class="riga-campi">
+      <div class="campo" style="max-width: 220px;">
+        <label for="targa-input">Targa</label>
+        <input type="text" id="targa-input" placeholder="AB123CD" maxlength="10" autocomplete="off" />
+      </div>
+    </div>
+
+    <div id="targa-esito" aria-live="polite"></div>
+
+    <div class="azioni">
+      <button type="button" class="link" id="btn-salta-targa">Salta, inserisco a mano →</button>
+      <button type="button" class="primario" id="btn-cerca-targa">Cerca targa</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════ STEP 2 — VALORE BASE ══════════════════════ -->
+  <section class="step-panel" id="step-2" hidden>
+    <h2>Passo 2 — Valore base del veicolo</h2>
+
+    <div class="aci-primaria">
+      <div class="etichetta-primaria">Ricerca tabelle ACI (modalità standard)</div>
+      <div class="campo">
+        <label for="aci-search">Marca e modello</label>
+        <input type="text" id="aci-search" placeholder="Es. Tesla Model Y, Golf 1.5 TSI…" autocomplete="off" />
+        <div class="aiuto">Ricerca su marca e modello. L'allestimento non è indicizzato dalla fonte ACI reale.</div>
+      </div>
+      <div class="risultati-aci" id="aci-risultati" hidden></div>
+      <div id="aci-selezione"></div>
+    </div>
+
+    <div class="toggle-manuale">
+      <button type="button" class="link" id="btn-toggle-manuale">Non trovi il veicolo nelle tabelle ACI?</button>
+    </div>
+
+    <div class="area-manuale" id="area-manuale" hidden>
+      <div class="etichetta-secondaria">Inserimento manuale del valore base</div>
+      <p class="aiuto">
+        Da usare solo per veicoli fuori produzione, versioni estere o
+        allestimenti speciali non presenti in tabella: il valore si
+        determina per riferimento al veicolo più simile.
+      </p>
+
+      <div class="opzione-radio">
+        <input type="radio" name="fonte-manuale" id="fonte-costo-km" value="COSTO_KM_MANUALE" />
+        <div class="testo">
+          <label for="fonte-costo-km"><strong>Costo al km del veicolo di riferimento</strong></label>
+          <span>Il motore applica la percorrenza convenzionale (15.000 km) come nella modalità ACI.</span>
+        </div>
+      </div>
+      <div class="campo" id="campo-costo-km-manuale" hidden>
+        <label for="costo-km-manuale-input">Costo al km (€/km)</label>
+        <input type="number" id="costo-km-manuale-input" step="0.0001" min="0" />
+      </div>
+
+      <div class="opzione-radio">
+        <input type="radio" name="fonte-manuale" id="fonte-valore-conv" value="VALORE_CONVENZIONALE_MANUALE" />
+        <div class="testo">
+          <label for="fonte-valore-conv"><strong>Valore convenzionale annuo già determinato</strong></label>
+          <span>Nessuna moltiplicazione per la percorrenza convenzionale: il valore indicato è già quello annuo.</span>
+        </div>
+      </div>
+      <div class="campo" id="campo-valore-conv-manuale" hidden>
+        <label for="valore-conv-manuale-input">Valore convenzionale annuo (€/anno)</label>
+        <input type="number" id="valore-conv-manuale-input" step="0.01" min="0" />
+      </div>
+
+      <div class="campo">
+        <label for="nota-fonte-valore">Nota di giustificazione (obbligatoria)</label>
+        <textarea id="nota-fonte-valore" placeholder="Veicolo di riferimento e criterio adottato…"></textarea>
+      </div>
+
+      <button type="button" class="link" id="btn-torna-aci">← Torna alla ricerca ACI</button>
+    </div>
+
+    <h3>Alimentazione</h3>
+    <div class="campo" style="max-width: 260px;">
+      <label for="alimentazione-select">Alimentazione</label>
+      <select id="alimentazione-select">
+        <option value="">— seleziona —</option>
+        <option value="BEV">Elettrico (BEV)</option>
+        <option value="PHEV">Ibrido plug-in (PHEV)</option>
+        <option value="ICE">Termico (benzina/diesel/GPL/metano)</option>
+        <option value="HEV_MHEV">Ibrido non plug-in (HEV/mild hybrid)</option>
+      </select>
+      <div class="aiuto" id="alimentazione-aiuto"></div>
+    </div>
+
+    <h3>Emissioni CO2</h3>
+    <div class="campo" style="max-width: 220px;">
+      <label for="co2-input">CO2 (g/km)</label>
+      <input type="number" id="co2-input" min="0" step="1" />
+    </div>
+    <div class="riquadro info">
+      Le tabelle ACI non riportano le emissioni di CO2. Lo trovi sul
+      libretto di circolazione, secondo quadrante, voce V.7 (g/km).
+      Necessario solo se il calcolo ricadrà nel regime emissioni
+      (tipicamente veicoli assegnati tra il 2020 e il 2025). Se non lo
+      conosci ora, puoi lasciarlo vuoto: se servirà, te lo richiederà il
+      passo successivo.
+    </div>
+
+    <div class="azioni">
+      <button type="button" id="btn-step2-indietro">← Indietro</button>
+      <button type="button" class="primario" id="btn-step2-avanti" disabled>Avanti →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════ STEP 3 — DATI CONTRATTUALI ══════════════════ -->
+  <section class="step-panel" id="step-3" hidden>
+    <h2>Passo 3 — Dati contrattuali</h2>
+
+    <fieldset>
+      <legend>Date del veicolo e del contratto in esame</legend>
+      <div class="riga-campi">
+        <div class="campo">
+          <label for="data-immatricolazione">Data prima immatricolazione</label>
+          <input type="date" id="data-immatricolazione" />
+        </div>
+        <div class="campo">
+          <label for="data-ordine">Data ordine al fornitore (se presente)</label>
+          <input type="date" id="data-ordine" />
+        </div>
+      </div>
+      <div class="riga-campi">
+        <div class="campo">
+          <label for="data-stipula">Data stipula contratto</label>
+          <input type="date" id="data-stipula" />
+        </div>
+        <div class="campo">
+          <label for="data-consegna">Data consegna al dipendente</label>
+          <input type="date" id="data-consegna" />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Tipo di atto</legend>
+      <div class="campo" style="max-width: 320px;">
+        <label for="tipo-atto">Tipo di atto</label>
+        <select id="tipo-atto">
+          <option value="PRIMA_ASSEGNAZIONE">Prima assegnazione</option>
+          <option value="PROROGA">Proroga</option>
+          <option value="RIASSEGNAZIONE">Riassegnazione</option>
+        </select>
+      </div>
+
+      <div id="blocco-contratto-originario" hidden>
+        <h3>Contratto originario</h3>
+        <p class="aiuto">
+          La data di prima immatricolazione è unica per il veicolo (già
+          indicata sopra) e vale anche per il contratto originario.
+        </p>
+        <div class="riga-campi">
+          <div class="campo">
+            <label for="orig-data-ordine">Data ordine al fornitore (se presente)</label>
+            <input type="date" id="orig-data-ordine" />
+          </div>
+          <div class="campo">
+            <label for="orig-data-stipula">Data stipula contratto originario</label>
+            <input type="date" id="orig-data-stipula" />
+          </div>
+          <div class="campo">
+            <label for="orig-data-consegna">Data consegna al primo dipendente</label>
+            <input type="date" id="orig-data-consegna" />
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Periodo di calcolo</legend>
+      <div class="riga-campi">
+        <div class="campo">
+          <label for="periodo-inizio">Data inizio periodo</label>
+          <input type="date" id="periodo-inizio" />
+        </div>
+        <div class="campo">
+          <label for="periodo-fine">Data fine periodo</label>
+          <input type="date" id="periodo-fine" />
+        </div>
+      </div>
+      <p class="aiuto">L'anno d'imposta viene ricavato automaticamente dalla data di inizio periodo.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Accessori e allestimenti extra-ACI</legend>
+      <div class="opzione-radio">
+        <input type="radio" name="accessori" id="accessori-assenti" value="ASSENTI" checked />
+        <div class="testo">
+          <label for="accessori-assenti"><strong>Assenti</strong></label>
+          <span>Nessun accessorio extra-ACI: il valore ACI selezionato è già completo.</span>
+        </div>
+      </div>
+      <div class="opzione-radio">
+        <input type="radio" name="accessori" id="accessori-lavoratore" value="ACQUISTATI_DAL_LAVORATORE" />
+        <div class="testo">
+          <label for="accessori-lavoratore"><strong>Acquistati dal lavoratore</strong></label>
+          <span>Accessori pagati dal dipendente: nessuna maggiorazione sul fringe benefit.</span>
+        </div>
+      </div>
+      <div class="opzione-radio">
+        <input type="radio" name="accessori" id="accessori-azienda" value="ACQUISTATI_DALL_AZIENDA" />
+        <div class="testo">
+          <label for="accessori-azienda"><strong>Acquistati dall'azienda</strong></label>
+          <span>Accessori pagati dall'azienda: comporta la maggiorazione del 5% prevista dal 2026 (art. 51 c.4 lett. a) TUIR, quarto periodo), se applicabile al regime.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Altri dati</legend>
+      <div class="riga-campi">
+        <div class="campo">
+          <label for="somme-trattenute">Somme trattenute al dipendente (€)</label>
+          <input type="number" id="somme-trattenute" min="0" step="0.01" value="0" />
+        </div>
+        <div class="campo">
+          <label for="altri-fringe-benefit">Altri fringe benefit nell'anno (€)</label>
+          <input type="number" id="altri-fringe-benefit" min="0" step="0.01" value="0" />
+        </div>
+      </div>
+      <div class="riga-campi">
+        <div class="campo">
+          <label for="qualifica-select">Qualifica</label>
+          <select id="qualifica-select">
+            <option value="DIPENDENTE">Dipendente</option>
+            <option value="AMMINISTRATORE">Amministratore</option>
+            <option value="COLLABORATORE">Collaboratore</option>
+          </select>
+        </div>
+      </div>
+      <div class="checkbox-linea">
+        <input type="checkbox" id="figli-carico" />
+        <label for="figli-carico">Figli fiscalmente a carico</label>
+      </div>
+      <div class="checkbox-linea">
+        <input type="checkbox" id="uso-esclusivo-aziendale" />
+        <label for="uso-esclusivo-aziendale">Uso esclusivamente aziendale (non promiscuo)</label>
+      </div>
+    </fieldset>
+
+    <div class="azioni">
+      <button type="button" id="btn-step3-indietro">← Indietro</button>
+      <button type="button" class="primario" id="btn-step3-calcola">Calcola →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ STEP 4 — RISULTATO ══════════════════════════ -->
+  <section class="step-panel" id="step-4" hidden>
+    <h2>Passo 4 — Risultato</h2>
+    <div id="risultato-contenuto"></div>
+    <div class="azioni">
+      <button type="button" id="btn-step4-indietro">← Torna ai dati contrattuali</button>
+      <button type="button" id="btn-nuovo-calcolo">Nuovo calcolo</button>
+    </div>
+  </section>
+
+  <footer class="app-footer">
+    Strumento di supporto al professionista: non sostituisce la verifica
+    del caso concreto. Valori non ufficiali, calcolati secondo
+    un'interpretazione della normativa che può contenere margini di
+    incertezza (segnalati dai warning): verificare sempre con le fonti
+    ufficiali prima dell'uso in busta paga.
+  </footer>
+
+</div>
+
+<script type="module" src="js/ui.js"></script>
+</body>
+</html>

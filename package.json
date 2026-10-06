@@ -1,0 +1,9 @@
+{
+  "name": "fringe-benefit-auto",
+  "private": true,
+  "type": "module",
+  "description": "Calcolo fringe benefit auto uso promiscuo — normativa italiana 2026. Nessuna dipendenza esterna: 'type: module' serve solo a far interpretare i .js come ES module a Node, non introduce pacchetti.",
+  "devDependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
